@@ -1,0 +1,85 @@
+{
+  "python": "3.11.9",
+  "gpu": "NVIDIA RTX 3060 Laptop GPU",
+  "engine_commit": "a237720b6cbf1294362ef1797699bd1f8705c66d",
+  "normal_pairs": [
+    {
+      "map": "Map01",
+      "seed": 29,
+      "steps": 1219,
+      "map_score": 86.47087572511856,
+      "partial_score_out_of_80": 56.91448714358678,
+      "equal": true
+    },
+    {
+      "map": "Map03",
+      "seed": 29,
+      "steps": 2901,
+      "map_score": 72.96782466792942,
+      "partial_score_out_of_80": 53.39348714119597,
+      "equal": true
+    },
+    {
+      "map": "Map04",
+      "seed": 29,
+      "steps": 2901,
+      "map_score": 82.76854789707703,
+      "partial_score_out_of_80": 54.80924814614707,
+      "equal": true
+    },
+    {
+      "map": "Map07",
+      "seed": 17,
+      "steps": 3133,
+      "map_score": 83.86280017951496,
+      "partial_score_out_of_80": 58.074128130547074,
+      "equal": true
+    },
+    {
+      "map": "Map07",
+      "seed": 29,
+      "steps": 3133,
+      "map_score": 84.78471787077181,
+      "partial_score_out_of_80": 60.479925649872904,
+      "equal": true
+    }
+  ],
+  "source_reports": [
+    {
+      "file": "20261028-handoff/v03-Map01-29-verified/benchmark.json",
+      "sha256": "b8116e27f44e349e9463c7b7fb815190464141591479068985faf2c7064105e1"
+    },
+    {
+      "file": "20261028-handoff/v03-Map03-29-verified/benchmark.json",
+      "sha256": "16278ab1f15e571ef53cca944cf0164ac44eb18f95b79af853b8c9505f8a8f01"
+    },
+    {
+      "file": "20261028-handoff/v03-Map04-29-verified/benchmark.json",
+      "sha256": "24f0fce6da9831a41ed56a22e0244fc0a3694eda4507e9a2cac00337847a03d4"
+    },
+    {
+      "file": "20261028-handoff/v03-Map07-17-verified/benchmark.json",
+      "sha256": "9f351a44600ffa196fc61f8528c1b001e45d5b9d67be972ec7390fd18cef51ab"
+    },
+    {
+      "file": "20261028-handoff/v03-Map07-29-verified/benchmark.json",
+      "sha256": "a76cf91319e2ee6b421840fe7492ba0fc70836df32233fe3858a87d82161ded0"
+    },
+    {
+      "file": "20261027-python311/v04-map07-nvidia/benchmark.json",
+      "sha256": "f85f28ec8dbbb0f770bbcfefd5e3344899a17b4af5f9284081a0e2c81e26f71f"
+    },
+    {
+      "file": "20261028-handoff/v04-Map01-29/benchmark.json",
+      "sha256": "53b717502c357937f24bcc689f4deda8c2cd14ec6a6d2b90d5a1ebedfa7aaa0e"
+    },
+    {
+      "file": "20261028-handoff/v04-Map03-29/benchmark.json",
+      "sha256": "f1a11e281ee8da55dd7352f78580874d7fc4a7dfcc7403d40d01c58042a15999"
+    },
+    {
+      "file": "20261028-handoff/v04-Map04-29/benchmark.json",
+      "sha256": "592910e1c940fd49776666d0999278bdbe9430a9bacb3e10f5145101fe3e8487"
+    }
+  ]
+}
