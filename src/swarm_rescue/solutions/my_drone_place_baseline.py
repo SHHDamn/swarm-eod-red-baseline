@@ -23,6 +23,7 @@ class MyDronePlaceBaseline(DroneAbstract):
     PLAN_PERIOD = 35
     MAX_RANGE = 300.0
     SUBMIT_PEER_TTL = 12
+    GOAL_PROGRESS_TIMEOUT = 140
 
     def __init__(self, identifier=None, misc_data=None, **kwargs):
         super().__init__(identifier=identifier, misc_data=misc_data, **kwargs)
@@ -47,6 +48,10 @@ class MyDronePlaceBaseline(DroneAbstract):
         self._blocked_until = {}
         self._last_progress_pos = None
         self._last_progress_step = 0
+        self._progress_goal = None
+        self._goal_best_distance = float("inf")
+        self._goal_progress_step = 0
+        self._goal_timeouts = 0
         self._escape_until = 0
         self._escape_sign = 1.0
         self._submitted = False
@@ -103,6 +108,7 @@ class MyDronePlaceBaseline(DroneAbstract):
             if cell is not None:
                 self._visits[cell] = min(255, int(self._visits[cell]) + 1)
         self._check_stuck()
+        self._check_goal_progress()
         if self._step < self._escape_until:
             cmd["forward"] = -0.4 if self._escape_until - self._step > 14 else 0.2
             cmd["rotation"] = 0.7 * self._escape_sign
@@ -350,6 +356,45 @@ class MyDronePlaceBaseline(DroneAbstract):
             self._escape_sign = -1.0 if int(self.identifier) % 2 else 1.0
         self._last_progress_pos = self._pos
         self._last_progress_step = self._step
+
+    def _check_goal_progress(self):
+        # 只跟踪本机估计位姿和已规划路径。使用剩余路径长度，允许正常
+        # 绕障时暂时远离终点；24 px 的改善门槛防止定位抖动不断刷新计时。
+        if (self._pos is None or self._goal is None or not self._waypoints or
+                self._step < self._escape_until):
+            self._progress_goal = None
+            return
+        if self._step % self.SCAN_PERIOD:
+            return
+        previous = self._pos
+        remaining = 0.0
+        for cell in self._waypoints:
+            point = self._world(cell)
+            remaining += math.hypot(point[0] - previous[0], point[1] - previous[1])
+            previous = point
+        same_region = (self._progress_goal is not None and
+                       max(abs(a - b) for a, b in
+                           zip(self._goal, self._progress_goal)) <= 2)
+        if not same_region or remaining <= self._goal_best_distance - 2 * self.CELL:
+            self._progress_goal = self._goal
+            self._goal_best_distance = remaining
+            self._goal_progress_step = self._step
+            return
+        if self._step - self._goal_progress_step < self.GOAL_PROGRESS_TIMEOUT:
+            return
+        # 禁选小邻域，避免下一次规划只把目标挪一格又回到同一困境。
+        row, col = self._goal
+        rows, cols = self._free.shape
+        for r in range(max(0, row - 2), min(rows, row + 3)):
+            for c in range(max(0, col - 2), min(cols, col + 3)):
+                self._blocked_until[(r, c)] = max(
+                    self._blocked_until.get((r, c), 0), self._step + 180)
+        self._goal_timeouts += 1
+        print(f"[place-baseline] goal timeout id={self.identifier}, step={self._step}")
+        self._goal = None
+        self._waypoints = []
+        self._progress_goal = None
+        self._last_plan_step = self._step - self.PLAN_PERIOD
 
     def _maybe_place(self, cmd, lidar, angles):
         inventory = self.carried_bombs_count()

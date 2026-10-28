@@ -1,5 +1,8 @@
 # 慧眼行动红方策略 · Swarm-Rescue
 
+> 当前分支是目标进展超时的实验候选，尚未替换参赛基线。9 组对照的收益和风险见
+> [进度报告](PROGRESS.md)；已验证的 v04 位于 [review/upstream-map07](https://github.com/SHHDamn/swarm-eod-red-baseline/tree/review/upstream-map07)。
+
 本仓库基于[赛事官方仿真框架](https://gitee.com/CJYLZS/swarm-eod)，加入了可运行的红方（`place`）初赛基线。无人机仅使用公开的传感器、通信和动作接口，在未知地图中探索、布设并提交地图；策略不读取仿真器真值。
 
 - [红方策略与本地评测进度](PROGRESS.md)
