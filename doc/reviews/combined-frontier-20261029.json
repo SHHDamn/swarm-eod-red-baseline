@@ -1,0 +1,40 @@
+{
+  "accepted": false,
+  "reason": "Map07/41 regression",
+  "teammate_commit": "075394a",
+  "baseline_commit": "d5933d7",
+  "pairs": [
+    {
+      "map": "Map07",
+      "seed": 41,
+      "baseline": 60.36552814383012,
+      "candidate": 60.334084798303316,
+      "delta": -0.03144334552680306,
+      "baseline_steps": 3133,
+      "candidate_steps": 3133,
+      "baseline_placed": 10,
+      "candidate_placed": 10,
+      "baseline_inventory": 0,
+      "candidate_inventory": 0,
+      "baseline_sha256": "958b57999d0954ceb771100411bcfc9dbe18796be3217dd234b89b6bd7d2f354",
+      "candidate_sha256": "70e728779d5a08a4fa97dca4b4e2943592c597ff573f830c6373cf09de630f31"
+    },
+    {
+      "map": "Map04",
+      "seed": 13,
+      "baseline": 55.351595244968635,
+      "candidate": 58.32333508045076,
+      "delta": 2.9717398354821256,
+      "baseline_steps": 2901,
+      "candidate_steps": 3136,
+      "baseline_placed": 10,
+      "candidate_placed": 10,
+      "baseline_inventory": 0,
+      "candidate_inventory": 0,
+      "baseline_sha256": "85a10f18d15c4650bb7585820642ff95d9fc36fd2bc4df054cdb0c2936810273",
+      "candidate_sha256": "b41a3cb57a4cfe9b4eafd24f023e10c5c6d41e5276d3f53eb9c10adc1b7a815d"
+    }
+  ],
+  "platform_tested": false,
+  "pushed": false
+}

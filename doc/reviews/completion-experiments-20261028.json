@@ -1,0 +1,78 @@
+{
+  "retained_strategy_commit": "e137729",
+  "retained_strategy_name": "v06",
+  "retained_strategy_sha256": "42df1f31c6c66a468080b06f7b6589a1e160d33b5a50afe88ba82b744cf3d29e",
+  "new_algorithm_accepted": false,
+  "candidates": [
+    {
+      "description": "ungated rendezvous",
+      "retained": false,
+      "strategy_sha256": "69b0e1df4ddcd2b4986deb1ede4237beb4bc21d20d24f30797817ffc19133a8f",
+      "healthy_baseline_steps": 4101,
+      "healthy_candidate_steps": 3406,
+      "healthy_baseline_partial": 52.82148118922463,
+      "healthy_candidate_partial": 56.39034644738853,
+      "healthy_partial_delta": 3.5688652581639033,
+      "early_loss_baseline_partial": 48.77996492836302,
+      "early_loss_candidate_partial": 48.60932638929378,
+      "early_loss_partial_delta": -0.17063853906924464,
+      "healthy_report_sha256": "a4c272a64afb8b00a3c8eff61602b1a4932c6b1fb147340c5c7d8dd079c78d6b",
+      "early_loss_report_sha256": "5dbf3f18f80e992ff2938e15a3619512b3fe74702ccdd15673d8eee89615663f"
+    },
+    {
+      "description": "continuous message-age guard",
+      "retained": false,
+      "strategy_sha256": "22ff4269964b9dbb33bbe234ef26e0d9c62fd93c5a0ee8962dccae61171b2fd6",
+      "healthy_baseline_steps": 4101,
+      "healthy_candidate_steps": 4101,
+      "healthy_baseline_partial": 52.82148118922463,
+      "healthy_candidate_partial": 52.50823099591639,
+      "healthy_partial_delta": -0.3132501933082352,
+      "early_loss_baseline_partial": 48.77996492836302,
+      "early_loss_candidate_partial": 48.77996492836302,
+      "early_loss_partial_delta": 0.0,
+      "healthy_report_sha256": "0b7bb1dda6ca73f4992e60f0f50bd2121fc10001266dc9dc05e6bceeed3de878",
+      "early_loss_report_sha256": "647c69e143ecc720d8ec9bd1de6ef2e1c522845580f075e532f0a3e45c6f9924"
+    },
+    {
+      "description": "one bounded attempt after fresh contact",
+      "retained": false,
+      "strategy_sha256": "4fa4303b5038eea20715c0b173183266026a5e9a633020bc50418382e06f93a0",
+      "healthy_baseline_steps": 4101,
+      "healthy_candidate_steps": 4101,
+      "healthy_baseline_partial": 52.82148118922463,
+      "healthy_candidate_partial": 52.29374033315385,
+      "healthy_partial_delta": -0.5277408560707784,
+      "early_loss_baseline_partial": 48.77996492836302,
+      "early_loss_candidate_partial": 48.77996492836302,
+      "early_loss_partial_delta": 0.0,
+      "healthy_report_sha256": "0b32726e80c52d4b8e6285bf50c4bb106ec92b57a04ad9fae2c420450f7a6976",
+      "early_loss_report_sha256": "8579118d60480150a49459eb499df3c46697257a71911a8d60186f5c41fee837"
+    }
+  ],
+  "zone_verification": {
+    "map": "Map03",
+    "declared": [
+      "NO_GPS_ZONE",
+      "NO_COM_ZONE"
+    ],
+    "actual_entities": {
+      "NoComZone": 0,
+      "NoGpsZone": 0
+    },
+    "normal_gps_and_radio_disabled_steps": 0,
+    "probe_sha256": "e89c9620fca123149c9c6c949c65cf19671be086554f861708cf7bc69d489c7d",
+    "explicit_fixture_entities": {
+      "NoComZone": 1,
+      "NoGpsZone": 1
+    },
+    "fixture_injection_step": 500,
+    "fixture_radio_disabled_agent_steps": 12585,
+    "fixture_gps_disabled_agent_steps": 12585,
+    "fixture_report_sha256": "b758d83f9502e1024620725c1f83be2f2768d2fd3f1feb9a9fde236ab09568b4"
+  },
+  "restored_real_regressions_passed": 4,
+  "restored_workspace_check": "passed",
+  "github_pushed": false,
+  "raw_results_overwritten": false
+}

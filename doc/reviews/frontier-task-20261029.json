@@ -1,0 +1,59 @@
+{
+  "accepted": false,
+  "retained": "v08 d5933d7",
+  "teammate": "075394a",
+  "pairs": [
+    {
+      "map": "Map04",
+      "seed": 13,
+      "baseline": 55.351595244968635,
+      "candidate": 58.32333508045076,
+      "delta": 2.9717398354821256,
+      "baseline_steps": 2901,
+      "candidate_steps": 3136,
+      "placed": 10,
+      "inventory": 0,
+      "baseline_hash": "f1e6a38102e0b70bb2774f19ffbbd12714178010da7099de273180c590742717",
+      "candidate_hash": "bafdabfa3069c4b29d4a9b35b6aa5ce58980e0355fe96b0d0aa94b77536d230b"
+    },
+    {
+      "map": "Map04",
+      "seed": 211,
+      "baseline": 59.44413890089352,
+      "candidate": 58.28812714552843,
+      "delta": -1.1560117553650926,
+      "baseline_steps": 2901,
+      "candidate_steps": 3501,
+      "placed": 10,
+      "inventory": 0,
+      "baseline_hash": "7fac442d6a9216243c32934cf6265cd999c92f86aef15035481227b220b67290",
+      "candidate_hash": "7ec0e931c473e143f5709390a799d19c3b64990d13c773e9add1c6438ba4a469"
+    },
+    {
+      "map": "Map07",
+      "seed": 211,
+      "baseline": 59.58857523483347,
+      "candidate": 59.58857523483347,
+      "delta": 0.0,
+      "baseline_steps": 3133,
+      "candidate_steps": 3133,
+      "placed": 10,
+      "inventory": 0,
+      "baseline_hash": "aca1a718b4d0d8ca942d6a51a8a0a897ca01694fab9933d450113624636b031a",
+      "candidate_hash": "8019041c3b84ad572d74515910a426eefa59583b9f65a7f6ed085d3aa604894b"
+    },
+    {
+      "map": "Map07",
+      "seed": 41,
+      "baseline": 60.36552814383012,
+      "candidate": 60.36552814383012,
+      "delta": 0.0,
+      "baseline_steps": 3133,
+      "candidate_steps": 3133,
+      "placed": 10,
+      "inventory": 0,
+      "baseline_hash": "c58f9607d52cbf1479a770c630923e88b5b2eff8b9859b2a9bd0722e5fd05a29",
+      "candidate_hash": "bbfc5a736bd8dafc7daea677e193f82be51a35228762854019a991cc94f9898c"
+    }
+  ]
+}

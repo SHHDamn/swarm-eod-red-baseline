@@ -17,9 +17,11 @@ $env:PYTHONDONTWRITEBYTECODE='1'
 python -m swarm_rescue.launcher --headless --competition -c config/competition_place_eval_plan.yml
 ```
 
-红方入口是 `src/swarm_rescue/solutions/my_drone_eval.py`，当前选择 `MyDronePlaceBaseline`；策略实现在 `src/swarm_rescue/solutions/my_drone_place_baseline.py`。v04 已加入存活机接力提交；Map01、Map03、Map04、Map07 的同种子对照和损毁测试见 [`PROGRESS.md`](PROGRESS.md)。
+红方入口是 `src/swarm_rescue/solutions/my_drone_eval.py`，当前选择 `MyDronePlaceBaseline`；策略实现在 `src/swarm_rescue/solutions/my_drone_place_baseline.py`。保留存活机接力；v09 在 v08 基础上进一步收缩近期融合图的噪声边缘。与 v08 的 10 组正常对照（7 提高、3 持平）及 6 组压力对照见 [`PROGRESS.md`](PROGRESS.md)，均为本地成绩。
 
 正式参赛前须把 `src/swarm_rescue/solutions/team_info.yml` 中的示例队名、成员改为真实信息，并运行 `python scripts/check_submission.py`。`team_number` 保持官方默认整数；不要填入字母数字分享码，平台会分配队伍 ID。公开仓库保留示例个人信息，本地提交包使用真实信息。
+
+禁区验证须检查实际实体和失效计数：当前 Map03 只保存计划中的 `zones_config`，没有据此创建禁区。普通报表中的禁区名称仅代表配置声明。使用 `scripts/benchmark_red_completion.py` 可记录实际区域数与禁用步数；显式注入区域的压力实验与普通计划成绩应分别记录，详见进度中的更正。
 
 ## 比赛任务与评分
 

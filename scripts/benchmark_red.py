@@ -75,6 +75,8 @@ def main():
                 "map": scenario.map_name,
                 "seed": seed,
                 "zones": scenario.zones_name_casual,
+                "zones_declared": [zone.name for zone in scenario.zones_config],
+                "zone_verification": "plan_metadata_only",
                 "destroyed_percent": result[0],
                 "health": result[1],
                 "steps": result[2],
