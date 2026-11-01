@@ -41,6 +41,8 @@ class MyDronePlaceBaseline(DroneAbstract):
         self._wall_set = set()
         self._wall_list = []
         self._send_cursor = 0
+        self._priority_cursor = 0
+        self._history_end = 0
         self._goal = None
         self._waypoints = []
         self._last_plan_step = -100
@@ -64,11 +66,23 @@ class MyDronePlaceBaseline(DroneAbstract):
     def define_message_for_all(self):
         # Messages are collected before control() in the current simulator step.
         n = min(72, len(self._wall_list))
-        chunk = []
+        # 新增格最多占一半，历史循环至少保留一半容量。
+        chunk = self._wall_list[self._priority_cursor:self._priority_cursor + 36]
+        self._priority_cursor += len(chunk)
         if n:
-            for i in range(n):
-                chunk.append(self._wall_list[(self._send_cursor + i) % len(self._wall_list)])
-            self._send_cursor = (self._send_cursor + n) % len(self._wall_list)
+            included = set(chunk)
+            checked = 0
+            while len(chunk) < n and checked < len(self._wall_list):
+                # 固定本轮终点，持续新增时也能回到较早的格子。
+                if self._send_cursor >= self._history_end:
+                    self._send_cursor = 0
+                    self._history_end = len(self._wall_list)
+                point = self._wall_list[self._send_cursor]
+                self._send_cursor += 1
+                checked += 1
+                if point not in included:
+                    chunk.append(point)
+                    included.add(point)
         return {"id": int(self.identifier), "step": self._step,
                 "pos": self._pos, "goal": self._goal,
                 "inv": self.carried_bombs_count(),
