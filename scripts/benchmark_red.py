@@ -127,19 +127,19 @@ class RoundDiagnostics:
             "local_confirmed_bins": sum(v >= 2 for v in drone._wall_votes.values()),
             "free_cells": int(np.count_nonzero(drone._free)),
             "completed": completed, "missing_completed": sorted(set(range(count)) - set(completed)),
-            "ready_since": drone._ready_since,
+            "ready_since": getattr(drone, "_ready_since", None),
             "submitted": drone._exploration_map_submission is not None,
             "peers": peers,
             "last_contact_age_steps": None if last_received is None else step - last_received,
             "peer_ready": {str(i): {"age_steps": step - int(heard), "ready": bool(ready)}
-                           for i, (heard, ready) in sorted(drone._peer_ready.items())},
+                           for i, (heard, ready) in sorted(getattr(drone, "_peer_ready", {}).items())},
             "inventory": int(drone.carried_bombs_count()),
             "health": int(drone.drone_health), "removed": bool(drone.removed),
         }
 
     def observe(self, drone):
         key = int(drone.identifier)
-        state = (tuple(sorted(drone._completed)), drone._ready_since,
+        state = (tuple(sorted(drone._completed)), getattr(drone, "_ready_since", None),
                  drone._exploration_map_submission is not None)
         changed = self._previous.get(key) != state
         if changed or drone._step % self.sample_period == 0:

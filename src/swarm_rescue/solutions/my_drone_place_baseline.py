@@ -22,7 +22,6 @@ class MyDronePlaceBaseline(DroneAbstract):
     SCAN_PERIOD = 4
     PLAN_PERIOD = 35
     MAX_RANGE = 300.0
-    SUBMIT_PEER_TTL = 12
 
     def __init__(self, identifier=None, misc_data=None, **kwargs):
         super().__init__(identifier=identifier, misc_data=misc_data, **kwargs)
@@ -35,7 +34,6 @@ class MyDronePlaceBaseline(DroneAbstract):
         self._last_place_step = -1000
         self._placed_positions = []
         self._peer = {}
-        self._peer_ready = {}
         self._completed = set()
         self._wall_votes = {}
         self._wall_set = set()
@@ -50,7 +48,6 @@ class MyDronePlaceBaseline(DroneAbstract):
         self._escape_until = 0
         self._escape_sign = 1.0
         self._submitted = False
-        self._ready_since = None
         if self.size_area is not None:
             w, h = (int(v) for v in self.size_area)
             shape = ((h + self.CELL - 1) // self.CELL,
@@ -72,7 +69,6 @@ class MyDronePlaceBaseline(DroneAbstract):
         return {"id": int(self.identifier), "step": self._step,
                 "pos": self._pos, "goal": self._goal,
                 "inv": self.carried_bombs_count(),
-                "ready": self._submission_due(),
                 "done": sorted(self._completed),
                 "walls": chunk, "bombs": self._placed_positions[-10:]}
 
@@ -145,7 +141,6 @@ class MyDronePlaceBaseline(DroneAbstract):
                 continue
             self._peer[peer_id] = (self._step, msg.get("inv"),
                                    msg.get("pos"), msg.get("goal"))
-            self._peer_ready[peer_id] = (self._step, msg.get("ready") is True)
             if msg.get("inv") == 0:
                 self._completed.add(peer_id)
             # Completion can travel through intermediate drones after direct
@@ -313,7 +308,21 @@ class MyDronePlaceBaseline(DroneAbstract):
             self._waypoints = []
 
     def _avoid(self, cmd, lidar, angles):
-        if lidar is None or angles is None or cmd["forward"] < 0:
+        if cmd["forward"] < 0:
+            # 倒车只使用后向有效射线；距离不足或无观测时停止平移。
+            rear = np.array([], dtype=float)
+            if lidar is not None and angles is not None:
+                values = np.asarray(lidar)
+                ray_angles = np.asarray(angles)
+                rear = values[np.isfinite(values) & (values >= 0) &
+                              (np.abs(np.abs(ray_angles) - math.pi) < 0.28)]
+            clearance = float(np.min(rear)) if len(rear) else 0.0
+            if clearance < 35:
+                cmd["forward"] = cmd["lateral"] = 0.0
+            elif clearance < 47:
+                cmd["forward"] = max(cmd["forward"], -0.25)
+            return
+        if lidar is None or angles is None:
             return
         arr = np.asarray(lidar)
         aa = np.asarray(angles)
@@ -399,32 +408,15 @@ class MyDronePlaceBaseline(DroneAbstract):
                for p in self._placed_positions):
             self._placed_positions.append(pos)
 
-    def _submission_due(self):
+    def _maybe_submit(self):
+        if self._submitted or int(self.identifier) != 0 or self._free is None:
+            return
         limit = self._limit()
         count = self._misc_data.number_drones if self._misc_data else None
         all_done = (count is not None and self.carried_bombs_count() == 0 and
                     all(i in self._completed for i in range(count)))
-        return ((all_done and self._step >= 0.58 * limit) or
-                self._step >= 0.82 * limit)
-
-    def _maybe_submit(self):
-        if self._submitted or self._free is None or not self._submission_due():
+        if not ((all_done and self._step >= 0.58 * limit) or self._step >= 0.82 * limit):
             return
-        if self._ready_since is None:
-            self._ready_since = self._step
-        # 备用机首次就绪后先传播完成消息，避免比 0 号机早收到最后一条
-        # done 时抢先结束正常局。等待有上限，完全失联仍能自行提交。
-        delay = (min(self.SUBMIT_PEER_TTL + 4 * int(self.identifier),
-                     int(0.04 * self._limit())) if int(self.identifier) else 0)
-        if self._step - self._ready_since < delay:
-            return
-        # 仅向通过官方通信刚刚宣布 ready 的低编号让位；损毁或断联后
-        # 消息最多保留 12 步，不能永久锁住提交。所有状态均为实例私有。
-        if any(peer_id < int(self.identifier) and ready and
-               self._step - heard < self.SUBMIT_PEER_TTL
-               for peer_id, (heard, ready) in self._peer_ready.items()):
-            return
-        count = self._misc_data.number_drones if self._misc_data else None
         w, h = (int(v) for v in self.size_area)
         grid = np.zeros((h, w), dtype=np.uint8)
         for col, row in self._wall_set:
@@ -437,7 +429,7 @@ class MyDronePlaceBaseline(DroneAbstract):
                      max(0, x - half):min(w, x - half + self.WALL_BIN)] = 1
         # The public size describes a ClosedPlayground with a 6 px wall frame.
         cv2.rectangle(grid, (2, 2), (w - 3, h - 3), 1, 5)
-        print(f"[place-baseline] submit id={self.identifier}, step={self._step}, walls={len(self._wall_set)}, "
+        print(f"[place-baseline] submit step={self._step}, walls={len(self._wall_set)}, "
               f"inventory={self.carried_bombs_count()}, peers={len(self._peer)}, "
               f"done={len(self._completed)}/{count}")
         self.submit_exploration_map(grid)
